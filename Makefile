@@ -15,3 +15,6 @@ start_db: ## Run a Postgres container on port 35432 and name store-db
 
 stop_db: ## Stop the db container
 	docker container stop complaints-db
+
+server: ## Start the server
+	uvicorn --reload --port 5001 app.main:app

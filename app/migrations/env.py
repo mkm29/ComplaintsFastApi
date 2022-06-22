@@ -4,24 +4,15 @@ from alembic import context
 from dotenv import load_dotenv
 from sqlalchemy import engine_from_config, pool
 
-import models
-from db import get_url, metadata
+import app.models
+from app.db import get_database_url, metadata
 
+# this is needed to load the .env file (when running locally)
 load_dotenv()
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-connection_string = get_url()
-config.set_main_option("sqlalchemy.url", connection_string)
-
-# db_params: dict = get_url(as_dict=True)
-#
-# section = config.config_ini_section
-# config.set_section_option(section, "DB_USER", db_params['user'])
-# config.set_section_option(section, "DB_PASS", db_params['password'])
-# config.set_section_option(section, "DB_HOST", db_params['host'])
-# config.set_section_option(section, "DB_PORT", db_params['port'])
-# config.set_section_option(section, "DB_NAME", db_params['database'])
+config.set_main_option("sqlalchemy.url", get_database_url())
 
 
 # Interpret the config file for Python logging.

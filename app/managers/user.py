@@ -1,16 +1,19 @@
+import logging
 from typing import Tuple
 
 from asyncpg import UniqueViolationError
 from fastapi import HTTPException
 from passlib.context import CryptContext
-from starlette.requests import Request
 
-from db import database
-from managers.auth import AuthManager
-from models import user
-from models.enums import RoleType
+from ..db import database
+from ..managers.auth import AuthManager
+from ..models import user
+from ..models.enums import RoleType
+from ..services.ses import SESService
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+ses_client = SESService()
 
 
 class UserManager:
@@ -27,7 +30,18 @@ class UserManager:
             raise HTTPException(
                 400, "There was an error saving the user to the database"
             )
-        # generate token
+        # send email
+        try:
+            response = ses_client.send_mail(
+                [user_data["email"]],
+                "src System: New Registration",
+                f"Welcome {user_data['first_name']} {user_data['last_name']}",
+            )
+        except Exception as exc:
+            logging.error(exc)
+            raise HTTPException(
+                400, "There was an error sending the new registration email"
+            )
         return user_do.__dict__, AuthManager.encode_token(user_do)
 
     @staticmethod

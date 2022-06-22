@@ -1,5 +1,5 @@
-from models.enums import RoleType
-from schemas.base import BaseUser
+from ...models.enums import RoleType
+from ...schemas.base import BaseUser
 
 
 class UserOut(BaseUser):
