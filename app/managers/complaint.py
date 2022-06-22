@@ -8,18 +8,9 @@ from sqlalchemy import update
 from .. import settings
 from ..db import database
 from ..models import complaint, user
-from ..models.enums import RoleType, State
-from ..services.s3 import S3Service
-from ..services.ses import SESService
+from ..models.enums import RoleType, State, CurrencyType
+from ..services import s3, ses, wise
 from ..utils.helpers import decode_photo
-
-s3 = None
-ses = None
-try:
-    s3 = S3Service()
-    ses = SESService()
-except Exception as ex:
-    logging.error(ex)
 
 
 class ComplaintManager:
@@ -67,6 +58,11 @@ class ComplaintManager:
     @staticmethod
     async def delete(complaint_id: int):
         await database.execute(complaint.delete().where(complaint.c.id == complaint_id))
+
+    @staticmethod
+    async def _handle_approval(full_name: str, iban: str):
+        # create recipient account
+        id_ = wise.create_recepient_account(full_name, CurrencyType.EUR, iban)
 
     @staticmethod
     async def update_state(complaint_id: int, state: State):
