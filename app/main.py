@@ -5,7 +5,11 @@ from . import settings
 from .db import database
 from .resources.routes import api_router
 
-app = FastAPI()
+app = FastAPI(
+    title=settings.app_name,
+    version=settings.app_version,
+    debug=settings.debug
+)
 app.include_router(api_router)
 
 
