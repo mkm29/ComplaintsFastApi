@@ -13,7 +13,7 @@ from sqlalchemy import (
 # from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from db import metadata
+from ..db import metadata
 
 from .enums import State
 

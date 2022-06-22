@@ -3,16 +3,13 @@ from os import getenv
 from typing import Optional
 
 import jwt
-from dotenv import load_dotenv
 from fastapi import HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from starlette.requests import Request
 
-from db import database
-from models import user
-from models.enums import RoleType
-
-load_dotenv()
+from ..db import database
+from ..models import user
+from ..models.enums import RoleType
 
 
 class AuthManager:

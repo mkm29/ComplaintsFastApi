@@ -1,15 +1,15 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from starlette.requests import Request
 
-from managers.auth import oauth2_schema, is_complainer, is_admin, is_approver
-from managers.complaint import ComplaintManager
-from models.enums import State
-from schemas.request.complaint import ComplaintIn
-from schemas.response.complaint import ComplaintOut
+from ..managers.auth import is_admin, is_approver, is_complainer, oauth2_schema
+from ..managers.complaint import ComplaintManager
+from ..models.enums import State
+from ..schemas.request.complaint import ComplaintIn
+from ..schemas.response.complaint import ComplaintOut
 
-router = APIRouter(tags=["Complaints"])
+router = APIRouter(tags=["src"])
 
 
 @router.get(

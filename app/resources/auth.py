@@ -2,8 +2,8 @@ from typing import Optional, Union
 
 from fastapi import APIRouter
 
-from managers.user import UserManager
-from schemas.request.user import LoginUserIn, RegisterUserIn
+from ..managers.user import UserManager
+from ..schemas.request.user import LoginUserIn, RegisterUserIn
 
 router = APIRouter(tags=["Auth"])
 

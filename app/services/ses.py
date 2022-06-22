@@ -1,18 +1,17 @@
 import logging
-import os
 from typing import List
 
 import boto3
 from fastapi import HTTPException
 
-from constants import FROM_EMAIL, CHARSET
+from app import settings
 
 
 class SESService:
     def __init__(self):
-        self.key = os.getenv("AWS_ACCESS_KEY_ID")
-        self.secret = os.getenv("AWS_SECRET_ACCESS_KEY")
-        self.region = os.getenv("AWS_DEFAULT_REGION")
+        self.key = settings.aws_access_key_id
+        self.secret = settings.aws_secret_access_key
+        self.region = settings.aws_default_region
         if not self.key or not self.secret or not self.region:
             raise KeyError("Required AWS environment variables not found")
 
@@ -32,16 +31,16 @@ class SESService:
                 Message={
                     "Body": {
                         "Text": {
-                            "Charset": CHARSET,
+                            "Charset": settings.charset,
                             "Data": body,
                         }
                     },
                     "Subject": {
-                        "Charset": CHARSET,
+                        "Charset": settings.charset,
                         "Data": subject,
                     },
                 },
-                Source=FROM_EMAIL,
+                Source=settings.from_email,
             )
         except Exception as exc:
             logging.error(exc)
