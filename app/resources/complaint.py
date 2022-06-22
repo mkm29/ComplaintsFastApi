@@ -9,7 +9,7 @@ from ..models.enums import State
 from ..schemas.request.complaint import ComplaintIn
 from ..schemas.response.complaint import ComplaintOut
 
-router = APIRouter(tags=["src"])
+router = APIRouter(tags=["Complaints"])
 
 
 @router.get(

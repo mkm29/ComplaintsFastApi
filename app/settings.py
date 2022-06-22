@@ -6,6 +6,7 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     app_name: str
     app_version: str
+    description: str
     debug: bool
     database_name: str
     database_host: str

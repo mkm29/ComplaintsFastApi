@@ -8,7 +8,8 @@ from .resources.routes import api_router
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
-    debug=settings.debug
+    debug=settings.debug,
+    openapi_url="/openapi.json",
 )
 app.include_router(api_router)
 
