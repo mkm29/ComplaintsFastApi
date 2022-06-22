@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from models.enums import State
+from ...models.enums import State
 
 from ..base import BaseComplaint
 

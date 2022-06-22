@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Enum, Integer, String, Table
 
-from db import metadata
+from ..db import metadata
 
 from .enums import RoleType
 

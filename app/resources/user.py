@@ -1,12 +1,12 @@
-from typing import Optional, List
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends
 from starlette.requests import Request
 
-from managers.auth import oauth2_schema, is_admin
-from managers.user import UserManager
-from models.enums import RoleType
-from schemas.response.user import UserOut
+from ..managers.auth import is_admin, oauth2_schema
+from ..managers.user import UserManager
+from ..models.enums import RoleType
+from ..schemas.response.user import UserOut
 
 router = APIRouter()
 

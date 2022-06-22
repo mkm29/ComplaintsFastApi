@@ -1,16 +1,17 @@
 import logging
 import os
 from uuid import uuid4
+
 from fastapi import HTTPException
 from sqlalchemy import update
 
-from constants import TMP_DIR
-from db import database
-from models import complaint, user
-from models.enums import RoleType, State
-from services.s3 import S3Service
-from services.ses import SESService
-from utils.helpers import decode_photo
+from .. import settings
+from ..db import database
+from ..models import complaint, user
+from ..models.enums import RoleType, State
+from ..services.s3 import S3Service
+from ..services.ses import SESService
+from ..utils.helpers import decode_photo
 
 s3 = None
 ses = None
@@ -41,11 +42,13 @@ class ComplaintManager:
         extension = complaint_data.pop("extension", None)
         # generate file name
         file_name = f"{uuid4()}.{extension}"
-        path = os.path.join(TMP_DIR, file_name)
+        path = os.path.join(settings.tmp_dir, file_name)
         decode_photo(path, encoded_photo)
         try:
             complaint_data["photo_url"] = s3.upload_file(
-                file_path=path, extension=extension
+                file_path=path,
+                bucket="complaint-system-bucket-smig",
+                extension=extension,
             )
             # add S3 URL to data
             # complaint_data["photo_url"] = f"s3://{os.getenv('AWS_BUCKET_NAME')}/{file_name}"
@@ -81,9 +84,6 @@ class ComplaintManager:
             .values({"state": state})
         )
         await database.execute(query)
-        # await database.execute(
-        #     complaint.update().where(complaint.c.id == complaint_id).values(state=state)
-        # )
         if ses:
             # need to find the user_id that is associated with this complaint -> complainer_id
             _user = await database.fetch_one(

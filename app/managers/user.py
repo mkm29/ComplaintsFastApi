@@ -5,11 +5,11 @@ from asyncpg import UniqueViolationError
 from fastapi import HTTPException
 from passlib.context import CryptContext
 
-from db import database
-from managers.auth import AuthManager
-from models import user
-from models.enums import RoleType
-from services.ses import SESService
+from ..db import database
+from ..managers.auth import AuthManager
+from ..models import user
+from ..models.enums import RoleType
+from ..services.ses import SESService
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -34,7 +34,7 @@ class UserManager:
         try:
             response = ses_client.send_mail(
                 [user_data["email"]],
-                "Complaints System: New Registration",
+                "src System: New Registration",
                 f"Welcome {user_data['first_name']} {user_data['last_name']}",
             )
         except Exception as exc:
